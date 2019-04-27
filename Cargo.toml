@@ -1,0 +1,6 @@
+[package]
+name = "rust-ddd-login-example"
+version = "0.1.0"
+authors = ["Jordi Domènech <jdomenechbborges@gmail.com>"]
+
+[dependencies]
