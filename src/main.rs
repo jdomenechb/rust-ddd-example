@@ -4,8 +4,6 @@ use infrastructure::domain::repositories::InMemoryClientRepository;
 use application::get_client_use_case::{Handler, Request};
 use std::io;
 use std::io::Write;
-use domain::entities::Client;
-use std::num::ParseIntError;
 
 mod domain;
 mod application;

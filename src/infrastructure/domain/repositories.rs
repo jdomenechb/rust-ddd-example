@@ -10,8 +10,8 @@ impl InMemoryClientRepository {
     pub fn new() -> InMemoryClientRepository {
         let mut clients : HashMap<String, Client> = HashMap::new();
 
-        clients.insert(String::from("ID0001"), Client::new(String::from("Client number 1")));
-        clients.insert(String::from("ID0002"), Client::new(String::from("Client number 2")));
+        clients.insert(String::from("1"), Client::new(String::from("Client number 1")));
+        clients.insert(String::from("2"), Client::new(String::from("Client number 2")));
 
         return InMemoryClientRepository {
             clients
