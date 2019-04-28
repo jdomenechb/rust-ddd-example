@@ -1,5 +1,6 @@
 use ::domain::repositories::ClientRepository;
 use domain::entities::Client;
+use std::error::Error;
 
 // --- REQUEST -------------------------------------------------------------------------------------
 
@@ -29,14 +30,7 @@ impl<'a> Handler<'a> {
         }
     }
 
-    pub fn execute(&self, request: Request) {
-        let client : Option<&Client> = self.client_repository.by_id(request.client_id);
-
-        match client {
-            None => panic!("No client found"),
-            Some(c) => println!("{:#X?}", c)
-        }
-
-
+    pub fn execute(&self, request: Request) -> Result<&Client, String>{
+        return self.client_repository.by_id(request.client_id);
     }
 }

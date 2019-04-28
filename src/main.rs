@@ -4,6 +4,8 @@ use infrastructure::domain::repositories::InMemoryClientRepository;
 use application::get_client_use_case::{Handler, Request};
 use std::io;
 use std::io::Write;
+use domain::entities::Client;
+use std::num::ParseIntError;
 
 mod domain;
 mod application;
@@ -23,10 +25,15 @@ fn menu() -> u8 {
     io::stdin().read_line(&mut option)
         .expect("Failed to read line");
 
-    let option: u8 = option.trim().parse()
-        .expect("Please type a number!");
+    let option = option.trim().parse();
 
-    option
+    match option {
+        Ok(o) => return o,
+        Err(e) => {
+            eprintln!("ERROR: Please, type a number");
+            99
+        }
+    }
 }
 
 fn main() {
@@ -34,7 +41,7 @@ fn main() {
     let get_client_use_case : Handler = Handler::new(&client_repository);
 
     while {
-        let option = menu();
+        let option :u8 = menu();
 
         match option {
             1 => {
@@ -47,7 +54,12 @@ fn main() {
 
                 let get_client_use_case_req : Request = Request::new(client_id.trim());
 
-                get_client_use_case.execute(get_client_use_case_req);
+                let client = get_client_use_case.execute(get_client_use_case_req);
+
+                match client {
+                    Ok(c) => println!("{:#X?}", c),
+                    Err(e) => eprintln!("ERROR: {}", e)
+                }
             }
 
             0 => println!("Exiting..."),

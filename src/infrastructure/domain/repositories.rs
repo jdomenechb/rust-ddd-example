@@ -20,9 +20,14 @@ impl InMemoryClientRepository {
 }
 
 impl ClientRepository for InMemoryClientRepository {
-    fn by_id(&self, id: &str) -> Option<&Client> {
+    fn by_id(&self, id: &str) -> Result<&Client, String> {
         let id_string = String::from(id);
 
-        return self.clients.get(&id_string);
+        let client = self.clients.get(&id_string);
+
+        match client {
+            Some(c) => Ok(c),
+            None => Err(String::from("No client found for given ID"))
+        }
     }
 }
