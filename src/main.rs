@@ -27,7 +27,7 @@ fn menu() -> u8 {
 
     match option {
         Ok(o) => return o,
-        Err(e) => {
+        Err(_) => {
             eprintln!("ERROR: Please, type a number");
             99
         }

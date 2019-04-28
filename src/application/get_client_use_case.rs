@@ -1,6 +1,6 @@
 use ::domain::repositories::ClientRepository;
 use domain::entities::Client;
-use std::error::Error;
+
 
 // --- REQUEST -------------------------------------------------------------------------------------
 
