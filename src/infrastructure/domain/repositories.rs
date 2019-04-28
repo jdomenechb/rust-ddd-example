@@ -10,8 +10,11 @@ impl InMemoryClientRepository {
     pub fn new() -> InMemoryClientRepository {
         let mut clients : HashMap<String, Client> = HashMap::new();
 
-        clients.insert(String::from("1"), Client::new(String::from("Client number 1")));
-        clients.insert(String::from("2"), Client::new(String::from("Client number 2")));
+        let client1 = Client::new(String::from("1"), String::from("Client number 1"));
+        let client2 = Client::new(String::from("2"), String::from("Client number 2"));
+
+        clients.insert(client1.id(), client1);
+        clients.insert(client2.id(), client2 );
 
         return InMemoryClientRepository {
             clients
@@ -29,5 +32,15 @@ impl ClientRepository for InMemoryClientRepository {
             Some(c) => Ok(c),
             None => Err(String::from("No client found for given ID"))
         }
+    }
+
+    fn save(&self, client: Client) {
+        self.clients.insert(client.id(), client);
+    }
+
+    fn next_identity(&self) -> String {
+        let size = self.clients.len();
+
+        String::from(size.to_string())
     }
 }
