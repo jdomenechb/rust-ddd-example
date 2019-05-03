@@ -1,9 +1,10 @@
 use domain::repositories::ClientRepository;
 use domain::entities::Client;
 use std::collections::HashMap;
+use std::cell::RefCell;
 
 pub struct InMemoryClientRepository {
-    clients : HashMap<String, Client>
+    clients : RefCell<HashMap<String, Client>>
 }
 
 impl InMemoryClientRepository {
@@ -17,7 +18,7 @@ impl InMemoryClientRepository {
         clients.insert(client2.id(), client2 );
 
         return InMemoryClientRepository {
-            clients
+            clients: RefCell::new(clients)
         }
     }
 }
@@ -26,7 +27,7 @@ impl ClientRepository for InMemoryClientRepository {
     fn by_id(&self, id: &str) -> Result<&Client, String> {
         let id_string = String::from(id);
 
-        let client = self.clients.get(&id_string);
+        let client = self.clients.borrow().get(&id_string);
 
         match client {
             Some(c) => Ok(c),
@@ -35,11 +36,11 @@ impl ClientRepository for InMemoryClientRepository {
     }
 
     fn save(&self, client: Client) {
-        self.clients.insert(client.id(), client);
+        self.clients.borrow_mut().insert(client.id(), client);
     }
 
     fn next_identity(&self) -> String {
-        let size = self.clients.len();
+        let size = self.clients.borrow().len();
 
         String::from(size.to_string())
     }
