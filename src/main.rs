@@ -4,7 +4,7 @@ extern crate core;
 use infrastructure::domain::repositories::InMemoryClientRepository;
 use std::io;
 use std::io::Write;
-use application::handlers::{GetClientUseCaseHandler, CreateClientUseCaseHandler};
+use application::handlers::{GetClientUseCaseHandler, CreateClientUseCaseHandler, GetAllClientsUseCaseHandler};
 use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 
 mod domain;
@@ -15,8 +15,9 @@ fn menu() -> u8 {
     println!("\nMENU");
     println!("----------------------------------------\n");
     println!("Please, select an option:");
-    println!("\t 1. Read a client");
-    println!("\t 2. Create a client");
+    println!("\t 1. List all clients");
+    println!("\t 2. Read a client");
+    println!("\t 3. Create a client");
     println!("\t 0. Exit");
     print!("\nOption: ");
     io::stdout().flush().expect("Error flushing");
@@ -39,6 +40,8 @@ fn menu() -> u8 {
 
 fn main() {
     let client_repository : InMemoryClientRepository = InMemoryClientRepository::new();
+
+    let get_all_clients_use_case_handler = GetAllClientsUseCaseHandler::new(&client_repository);
     let get_client_use_case_handler = GetClientUseCaseHandler::new(&client_repository);
     let create_client_use_case_handler = CreateClientUseCaseHandler::new(&client_repository);
 
@@ -47,6 +50,23 @@ fn main() {
 
         match option {
             1 => {
+                println!();
+
+                let clients=  get_all_clients_use_case_handler.execute();
+
+                if clients.is_empty() {
+                    println!("No clients found");
+                } else {
+                    println!("Client list");
+                    println!("----------------------------------------\n");
+
+                    for client in clients {
+                        println!("{:#X?}", client);
+                    }
+                }
+            }
+
+            2 => {
                 println!("\nPlease, enter the ID of the client that you want to read:");
 
                 let mut client_id :String = String::new();
@@ -64,7 +84,7 @@ fn main() {
                 }
             }
 
-            2 => {
+            3 => {
                 println!("\nPlease, enter the name of the client that you want to create:");
 
                 let mut client_name :String = String::new();

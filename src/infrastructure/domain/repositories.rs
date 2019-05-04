@@ -44,4 +44,14 @@ impl ClientRepository for InMemoryClientRepository {
 
         String::from(size.to_string())
     }
+
+    fn all(&self) -> Vec<Client> {
+        let mut result = Vec::new();
+
+        for value in self.clients.borrow().values() {
+            result.push(value.clone())
+        }
+
+        result
+    }
 }
