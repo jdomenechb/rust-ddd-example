@@ -30,7 +30,7 @@ impl<'a> Handler<'a> {
         }
     }
 
-    pub fn execute(&self, request: Request) -> Result<&Client, String>{
-        return self.client_repository.by_id(request.client_id);
+    pub fn execute(&self, request: Request) -> Result<Client, String>{
+        return self.client_repository.by_id(String::from(request.client_id));
     }
 }

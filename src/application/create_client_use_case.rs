@@ -1,3 +1,4 @@
+/*
 use ::domain::repositories::ClientRepository;
 use domain::entities::Client;
 
@@ -36,4 +37,4 @@ impl<'a> Handler<'a> {
 
         self.client_repository.save(client);
     }
-}
+}*/

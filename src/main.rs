@@ -3,7 +3,6 @@ extern crate core;
 
 use infrastructure::domain::repositories::InMemoryClientRepository;
 use application::get_client_use_case;
-use application::create_client_use_case;
 use std::io;
 use std::io::Write;
 
@@ -40,7 +39,7 @@ fn menu() -> u8 {
 fn main() {
     let client_repository : InMemoryClientRepository = InMemoryClientRepository::new();
     let get_client_use_case_handler = get_client_use_case::Handler::new(&client_repository);
-    let create_client_use_case_handler = create_client_use_case::Handler::new(&client_repository);
+    //let create_client_use_case_handler = create_client_use_case::Handler::new(&client_repository);
 
 
     while {
@@ -65,7 +64,7 @@ fn main() {
                 }
             }
 
-            2 => {
+            /*2 => {
                 println!("\nPlease, enter the name of the client that you want to create:");
 
                 let mut client_name :String = String::new();
@@ -76,7 +75,7 @@ fn main() {
                 let create_client_use_case_req  = create_client_use_case::Request::new(String::from(client_name.trim()));
 
                 create_client_use_case_handler.execute(create_client_use_case_req);
-            }
+            }*/
 
             0 => println!("Exiting..."),
             _ => println!("Invalid option")
