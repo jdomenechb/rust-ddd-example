@@ -15,4 +15,4 @@ A menu will appear that will guide you through the application.
 
 
 ## Contribution
-Please, feel free to contribute discussing, commenting or improving the application via Pull Requests or Issues. All type of feedback will be welcomed!
+Please, feel free to contribute asking, discussing, commenting or improving the application via Pull Requests or Issues. All type of feedback will be welcomed!
