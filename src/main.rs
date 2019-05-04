@@ -2,10 +2,10 @@ extern crate proc_macro;
 extern crate core;
 
 use infrastructure::domain::repositories::InMemoryClientRepository;
-use application::get_client_use_case;
-use application::create_client_use_case;
 use std::io;
 use std::io::Write;
+use application::handlers::{GetClientUseCaseHandler, CreateClientUseCaseHandler};
+use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 
 mod domain;
 mod application;
@@ -39,8 +39,8 @@ fn menu() -> u8 {
 
 fn main() {
     let client_repository : InMemoryClientRepository = InMemoryClientRepository::new();
-    let get_client_use_case_handler = get_client_use_case::Handler::new(&client_repository);
-    let create_client_use_case_handler = create_client_use_case::Handler::new(&client_repository);
+    let get_client_use_case_handler = GetClientUseCaseHandler::new(&client_repository);
+    let create_client_use_case_handler = CreateClientUseCaseHandler::new(&client_repository);
 
     while {
         let option :u8 = menu();
@@ -54,7 +54,7 @@ fn main() {
                 io::stdin().read_line(&mut client_id)
                     .expect("Failed to read line");
 
-                let get_client_use_case_req = get_client_use_case::Request::new(client_id.trim());
+                let get_client_use_case_req = GetClientUseCaseRequest::new(client_id.trim());
 
                 let client = get_client_use_case_handler.execute(get_client_use_case_req);
 
@@ -72,7 +72,7 @@ fn main() {
                 io::stdin().read_line(&mut client_name)
                     .expect("Failed to read line");
 
-                let create_client_use_case_req  = create_client_use_case::Request::new(String::from(client_name.trim()));
+                let create_client_use_case_req  = CreateClientUseCaseRequest::new(String::from(client_name.trim()));
 
                 create_client_use_case_handler.execute(create_client_use_case_req);
             }
