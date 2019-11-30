@@ -6,10 +6,10 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn new(id: String, name: String) -> Client {
+    pub fn new(id: &str, name: &str) -> Client {
         Client {
-            id,
-            name
+            id: id.to_string(),
+            name: name.to_string()
         }
     }
 

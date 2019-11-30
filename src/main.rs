@@ -1,11 +1,9 @@
 extern crate proc_macro;
 extern crate core;
 
-use infrastructure::domain::repositories::InMemoryClientRepository;
 use std::io;
 use std::io::Write;
-use application::handlers::{GetClientUseCaseHandler, CreateClientUseCaseHandler, GetAllClientsUseCaseHandler};
-use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
+use application::handlers::ClientHandler;
 
 mod domain;
 mod application;
@@ -39,11 +37,7 @@ fn menu() -> u8 {
 }
 
 fn main() {
-    let client_repository : InMemoryClientRepository = InMemoryClientRepository::new();
-
-    let get_all_clients_use_case_handler = GetAllClientsUseCaseHandler::new(&client_repository);
-    let get_client_use_case_handler = GetClientUseCaseHandler::new(&client_repository);
-    let create_client_use_case_handler = CreateClientUseCaseHandler::new(&client_repository);
+    let client_handler = ClientHandler::new();
 
     while {
         let option :u8 = menu();
@@ -52,7 +46,7 @@ fn main() {
             1 => {
                 println!();
 
-                let clients=  get_all_clients_use_case_handler.execute();
+                let clients=  client_handler.get_all_clients() ;
 
                 if clients.is_empty() {
                     println!("No clients found");
@@ -74,9 +68,8 @@ fn main() {
                 io::stdin().read_line(&mut client_id)
                     .expect("Failed to read line");
 
-                let get_client_use_case_req = GetClientUseCaseRequest::new(client_id.trim());
 
-                let client = get_client_use_case_handler.execute(get_client_use_case_req);
+                let client = client_handler.get_by_id(client_id.trim());
 
                 match client {
                     Ok(c) => println!("{:#X?}", c),
@@ -92,9 +85,7 @@ fn main() {
                 io::stdin().read_line(&mut client_name)
                     .expect("Failed to read line");
 
-                let create_client_use_case_req  = CreateClientUseCaseRequest::new(String::from(client_name.trim()));
-
-                create_client_use_case_handler.execute(create_client_use_case_req);
+                client_handler.create_client(client_name.trim());
             }
 
             0 => println!("Exiting..."),
