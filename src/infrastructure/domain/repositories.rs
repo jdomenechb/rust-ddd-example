@@ -14,8 +14,8 @@ impl InMemoryClientRepository {
         let client1 = Client::new("1", "Client number 1");
         let client2 = Client::new("2", "Client number 2");
 
-        clients.insert(client1.id().clone(), client1);
-        clients.insert(client2.id().clone(), client2 );
+        clients.insert(client1.id.clone(), client1);
+        clients.insert(client2.id.clone(), client2 );
 
         return InMemoryClientRepository {
             clients: RefCell::new(clients)
@@ -36,7 +36,7 @@ impl ClientRepository for InMemoryClientRepository {
     }
 
     fn save(&self, client: Client) {
-        self.clients.borrow_mut().insert(client.id().clone(), client);
+        self.clients.borrow_mut().insert(client.id.clone(), client);
     }
 
     fn next_identity(&self) -> String {

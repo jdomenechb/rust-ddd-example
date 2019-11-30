@@ -46,7 +46,7 @@ fn main() {
             1 => {
                 println!();
 
-                let clients=  client_handler.get_all_clients() ;
+                let clients=  client_handler.all_clients() ;
 
                 if clients.is_empty() {
                     println!("No clients found");
