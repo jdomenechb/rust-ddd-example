@@ -1,5 +1,5 @@
 use domain::repositories::ClientRepository;
-use domain::clients::{Client, ClientInfo};
+use domain::clients::{ClientInfo};
 use std::collections::HashMap;
 use std::cell::RefCell;
 

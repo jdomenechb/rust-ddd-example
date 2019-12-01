@@ -1,4 +1,5 @@
 use domain::repositories::ClientRepository;
+use std::rc::Rc;
 
 #[derive(Clone, Debug)]
 pub struct ClientInfo {
@@ -14,15 +15,15 @@ impl ClientInfo {
         }
     }
 }
-// ClientAggregate
+// Client Aggregate
 pub struct Client{
-    client_repository: Box<dyn ClientRepository> 
+    client_repository: Rc<dyn ClientRepository>
 }
 
 impl Client{
-    pub fn new(client_repository: impl ClientRepository + 'static) -> Client{
+    pub fn new(client_repository: Rc<dyn ClientRepository>) -> Client{
         Client {
-            client_repository: Box::new(client_repository)
+            client_repository: client_repository
         }
     }
 
@@ -31,13 +32,5 @@ impl Client{
         let client = ClientInfo::new(&id, name);
 
         self.client_repository.save(client);
-    }
-
-    pub fn get_by_id(&self, client_id: &str) -> Result<ClientInfo, String>{
-        return self.client_repository.by_id(client_id);
-    }
-
-    pub fn all_clients(&self) -> Vec<ClientInfo> {
-        return self.client_repository.all();
     }
 }

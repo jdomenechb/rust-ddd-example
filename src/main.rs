@@ -3,7 +3,7 @@ extern crate core;
 
 use std::io;
 use std::io::Write;
-use application::handlers::ClientHandler;
+use application::handlers::{MockApi};
 
 mod domain;
 mod application;
@@ -37,7 +37,7 @@ fn menu() -> u8 {
 }
 
 fn main() {
-    let client_handler = ClientHandler::new();
+    let api = MockApi::new();
 
     while {
         let option :u8 = menu();
@@ -46,7 +46,7 @@ fn main() {
             1 => {
                 println!();
 
-                let clients=  client_handler.all_clients() ;
+                let clients=  api.all_clients() ;
 
                 if clients.is_empty() {
                     println!("No clients found");
@@ -69,7 +69,7 @@ fn main() {
                     .expect("Failed to read line");
 
 
-                let client = client_handler.get_by_id(client_id.trim());
+                let client = api.get_by_id(client_id.trim());
 
                 match client {
                     Ok(c) => println!("{:#X?}", c),
@@ -85,7 +85,7 @@ fn main() {
                 io::stdin().read_line(&mut client_name)
                     .expect("Failed to read line");
 
-                client_handler.create_client(client_name.trim());
+                api.create_client(client_name.trim());
             }
 
             0 => println!("Exiting..."),
