@@ -1,62 +1,54 @@
+use infrastructure::repositories::InMemoryClientRepository;
 use domain::repositories::ClientRepository;
-use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
-use domain::entities::Client;
+use domain::clients::{ClientInfo, Client};
+use std::rc::Rc;
 
-// -------------------------------------------------------------------------------------------------
-
-pub struct CreateClientUseCaseHandler<'a> {
-    client_repository: &'a ClientRepository
+pub enum Commands {
+    CreateClient(String)
 }
 
-impl<'a> CreateClientUseCaseHandler<'a> {
-    pub fn new(client_repository: &ClientRepository) -> CreateClientUseCaseHandler {
-        return CreateClientUseCaseHandler {
-            client_repository
+pub struct MockApi{
+    pub client_command_handler: ClientCommandHandler,
+    pub client_repository: Rc<dyn ClientRepository>
+}
+
+impl MockApi{
+    pub fn new() -> Self {
+        let mem_repository =Rc::new(InMemoryClientRepository::new());
+        return MockApi {
+            client_command_handler: ClientCommandHandler::new(mem_repository.clone()),
+            client_repository: mem_repository.clone(),
         }
     }
 
-    pub fn execute(&self, request: CreateClientUseCaseRequest) {
-        let id = self.client_repository.next_identity();
-        let client = Client::new(id, request.name);
+    pub fn get_by_id(&self, client_id: &str) -> Result<ClientInfo, String>{
+        self.client_repository.as_ref().by_id(client_id)
+    }
 
-        self.client_repository.save(client);
+    pub fn all_clients(&self) -> Vec<ClientInfo> {
+        self.client_repository.as_ref().all()
+    }
+
+    pub fn create_client(&self, name: &str) {
+        self.client_command_handler.handle_commands(Commands::CreateClient(name.to_string()));
     }
 }
 
-
-// -------------------------------------------------------------------------------------------------
-
-pub struct GetClientUseCaseHandler<'a> {
-    client_repository: &'a ClientRepository
+pub struct ClientCommandHandler{
+    client: Box<Client>
 }
 
-impl<'a> GetClientUseCaseHandler<'a> {
-    pub fn new(client_repository: &ClientRepository) -> GetClientUseCaseHandler {
-        return GetClientUseCaseHandler {
-            client_repository
+impl ClientCommandHandler{
+    pub fn new(client_repository: Rc<dyn ClientRepository>) -> Self {
+        let client = Client::new(client_repository);
+        return ClientCommandHandler {
+            client: Box::new(client)
         }
     }
 
-    pub fn execute(&self, request: GetClientUseCaseRequest) -> Result<Client, String>{
-        return self.client_repository.by_id(String::from(request.client_id));
-    }
-}
-
-
-// -------------------------------------------------------------------------------------------------
-
-pub struct GetAllClientsUseCaseHandler<'a> {
-    client_repository: &'a ClientRepository
-}
-
-impl<'a> GetAllClientsUseCaseHandler<'a> {
-    pub fn new(client_repository: &ClientRepository) -> GetAllClientsUseCaseHandler {
-        return GetAllClientsUseCaseHandler {
-            client_repository
+    pub fn handle_commands(&self, command: Commands) {
+        match command {
+            Commands::CreateClient(name) => self.client.as_ref().create_client(&name)
         }
-    }
-
-    pub fn execute(&self) -> Vec<Client> {
-        return self.client_repository.all();
     }
 }
