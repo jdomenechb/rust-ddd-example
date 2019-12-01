@@ -1,8 +1,8 @@
-use super::entities::Client;
+use super::clients::ClientInfo;
 
 pub trait ClientRepository {
-    fn by_id(&self, id: &str) -> Result<Client, String>;
-    fn save(&self, client: Client);
+    fn by_id(&self, id: &str) -> Result<ClientInfo, String>;
+    fn save(&self, client: ClientInfo);
     fn next_identity(&self) -> String;
-    fn all(&self) -> Vec<Client>;
+    fn all(&self) -> Vec<ClientInfo>;
 }

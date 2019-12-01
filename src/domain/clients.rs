@@ -1,43 +1,43 @@
 use domain::repositories::ClientRepository;
 
 #[derive(Clone, Debug)]
-pub struct Client {
+pub struct ClientInfo {
     pub id: String,
     pub name: String,
 }
 
-impl Client {
-    pub fn new(id: &str, name: &str) -> Client {
-        Client {
+impl ClientInfo {
+    pub fn new(id: &str, name: &str) -> ClientInfo {
+        ClientInfo {
             id: id.to_string(),
             name: name.to_string(),
         }
     }
 }
-
-pub struct ClientAggregate{
+// ClientAggregate
+pub struct Client{
     client_repository: Box<dyn ClientRepository> 
 }
 
-impl ClientAggregate{
-    pub fn new(client_repository: impl ClientRepository + 'static) -> ClientAggregate {
-        ClientAggregate {
+impl Client{
+    pub fn new(client_repository: impl ClientRepository + 'static) -> Client{
+        Client {
             client_repository: Box::new(client_repository)
         }
     }
 
     pub fn create_client(&self, name: &str) {
         let id = self.client_repository.next_identity();
-        let client = Client::new(&id, name);
+        let client = ClientInfo::new(&id, name);
 
         self.client_repository.save(client);
     }
 
-    pub fn get_by_id(&self, client_id: &str) -> Result<Client, String>{
+    pub fn get_by_id(&self, client_id: &str) -> Result<ClientInfo, String>{
         return self.client_repository.by_id(client_id);
     }
 
-    pub fn all_clients(&self) -> Vec<Client> {
+    pub fn all_clients(&self) -> Vec<ClientInfo> {
         return self.client_repository.all();
     }
 }
