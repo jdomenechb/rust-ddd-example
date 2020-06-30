@@ -1,6 +1,6 @@
 # Rust Domain Driven Design Example
 
-The purpose of this project is to write a simple application in Rust that follow basic [Domain Driven Design](https://dzone.com/refcardz/getting-started-domain-driven) principles, in order to test the capabilities of the language to write applications that follow DDD.
+The purpose of this project is to write a simple application in Rust (2018 edition) that follow basic [Domain Driven Design](https://dzone.com/refcardz/getting-started-domain-driven) principles, in order to test the capabilities of the language to write applications that follow DDD.
 
 
 ## Running the project

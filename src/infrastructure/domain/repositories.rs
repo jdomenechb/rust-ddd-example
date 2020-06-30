@@ -1,7 +1,7 @@
-use domain::repositories::ClientRepository;
-use domain::entities::Client;
 use std::collections::HashMap;
 use std::cell::RefCell;
+use crate::domain::entities::Client;
+use crate::domain::repositories::ClientRepository;
 
 pub struct InMemoryClientRepository {
     clients : RefCell<HashMap<String, Client>>

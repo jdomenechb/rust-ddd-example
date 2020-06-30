@@ -1,15 +1,15 @@
-use domain::repositories::ClientRepository;
-use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
-use domain::entities::Client;
+use crate::domain::repositories::ClientRepository;
+use crate::application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
+use crate::domain::entities::Client;
 
 // -------------------------------------------------------------------------------------------------
 
 pub struct CreateClientUseCaseHandler<'a> {
-    client_repository: &'a ClientRepository
+    client_repository: &'a dyn ClientRepository
 }
 
 impl<'a> CreateClientUseCaseHandler<'a> {
-    pub fn new(client_repository: &ClientRepository) -> CreateClientUseCaseHandler {
+    pub fn new(client_repository: &dyn ClientRepository) -> CreateClientUseCaseHandler {
         return CreateClientUseCaseHandler {
             client_repository
         }
@@ -27,11 +27,11 @@ impl<'a> CreateClientUseCaseHandler<'a> {
 // -------------------------------------------------------------------------------------------------
 
 pub struct GetClientUseCaseHandler<'a> {
-    client_repository: &'a ClientRepository
+    client_repository: &'a dyn ClientRepository
 }
 
 impl<'a> GetClientUseCaseHandler<'a> {
-    pub fn new(client_repository: &ClientRepository) -> GetClientUseCaseHandler {
+    pub fn new(client_repository: &dyn ClientRepository) -> GetClientUseCaseHandler {
         return GetClientUseCaseHandler {
             client_repository
         }
@@ -46,11 +46,11 @@ impl<'a> GetClientUseCaseHandler<'a> {
 // -------------------------------------------------------------------------------------------------
 
 pub struct GetAllClientsUseCaseHandler<'a> {
-    client_repository: &'a ClientRepository
+    client_repository: &'a dyn ClientRepository
 }
 
 impl<'a> GetAllClientsUseCaseHandler<'a> {
-    pub fn new(client_repository: &ClientRepository) -> GetAllClientsUseCaseHandler {
+    pub fn new(client_repository: &dyn ClientRepository) -> GetAllClientsUseCaseHandler {
         return GetAllClientsUseCaseHandler {
             client_repository
         }
