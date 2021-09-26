@@ -1,14 +1,16 @@
-extern crate proc_macro;
 extern crate core;
+extern crate proc_macro;
 
+use application::handlers::{
+    CreateClientUseCaseHandler, GetAllClientsUseCaseHandler, GetClientUseCaseHandler,
+};
+use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 use infrastructure::domain::repositories::InMemoryClientRepository;
 use std::io;
 use std::io::Write;
-use application::handlers::{GetClientUseCaseHandler, CreateClientUseCaseHandler, GetAllClientsUseCaseHandler};
-use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 
-mod domain;
 mod application;
+mod domain;
 mod infrastructure;
 
 fn menu() -> u8 {
@@ -22,15 +24,16 @@ fn menu() -> u8 {
     print!("\nOption: ");
     io::stdout().flush().expect("Error flushing");
 
-    let mut option :String = String::new();
+    let mut input: String = String::new();
 
-    io::stdin().read_line(&mut option)
+    io::stdin()
+        .read_line(&mut input)
         .expect("Failed to read line");
 
-    let option = option.trim().parse();
+    let option = input.trim().parse();
 
     match option {
-        Ok(o) => return o,
+        Ok(o) => o,
         Err(_) => {
             eprintln!("ERROR: Please, type a number");
             99
@@ -39,20 +42,20 @@ fn menu() -> u8 {
 }
 
 fn main() {
-    let client_repository : InMemoryClientRepository = InMemoryClientRepository::new();
+    let client_repository: InMemoryClientRepository = InMemoryClientRepository::new();
 
     let get_all_clients_use_case_handler = GetAllClientsUseCaseHandler::new(&client_repository);
     let get_client_use_case_handler = GetClientUseCaseHandler::new(&client_repository);
     let create_client_use_case_handler = CreateClientUseCaseHandler::new(&client_repository);
 
     while {
-        let option :u8 = menu();
+        let option: u8 = menu();
 
         match option {
             1 => {
                 println!();
 
-                let clients=  get_all_clients_use_case_handler.execute();
+                let clients = get_all_clients_use_case_handler.execute();
 
                 if clients.is_empty() {
                     println!("No clients found");
@@ -69,9 +72,10 @@ fn main() {
             2 => {
                 println!("\nPlease, enter the ID of the client that you want to read:");
 
-                let mut client_id :String = String::new();
+                let mut client_id: String = String::new();
 
-                io::stdin().read_line(&mut client_id)
+                io::stdin()
+                    .read_line(&mut client_id)
                     .expect("Failed to read line");
 
                 let get_client_use_case_req = GetClientUseCaseRequest::new(client_id.trim());
@@ -80,25 +84,27 @@ fn main() {
 
                 match client {
                     Ok(c) => println!("{:#X?}", c),
-                    Err(e) => eprintln!("ERROR: {}", e)
+                    Err(e) => eprintln!("ERROR: {}", e),
                 }
             }
 
             3 => {
                 println!("\nPlease, enter the name of the client that you want to create:");
 
-                let mut client_name :String = String::new();
+                let mut client_name: String = String::new();
 
-                io::stdin().read_line(&mut client_name)
+                io::stdin()
+                    .read_line(&mut client_name)
                     .expect("Failed to read line");
 
-                let create_client_use_case_req  = CreateClientUseCaseRequest::new(String::from(client_name.trim()));
+                let create_client_use_case_req =
+                    CreateClientUseCaseRequest::new(String::from(client_name.trim()));
 
                 create_client_use_case_handler.execute(create_client_use_case_req);
             }
 
             0 => println!("Exiting..."),
-            _ => println!("Invalid option")
+            _ => println!("Invalid option"),
         };
 
         option != 0

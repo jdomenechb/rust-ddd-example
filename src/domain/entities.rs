@@ -1,16 +1,12 @@
-#[derive(Debug)]
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Client {
     id: String,
-    name: String
+    name: String,
 }
 
 impl Client {
     pub fn new(id: String, name: String) -> Client {
-        Client {
-            id,
-            name
-        }
+        Client { id, name }
     }
 
     pub fn id(&self) -> &String {
