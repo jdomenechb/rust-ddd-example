@@ -43,7 +43,7 @@ fn menu() -> u8 {
 }
 
 fn main() {
-    let client_repository: InMemoryClientRepository = InMemoryClientRepository::new();
+    let client_repository: InMemoryClientRepository = InMemoryClientRepository::new_with_samples();
 
     let get_all_clients_use_case_handler = GetAllClientsUseCaseHandler::new(&client_repository);
     let get_client_use_case_handler = GetClientUseCaseHandler::new(&client_repository);

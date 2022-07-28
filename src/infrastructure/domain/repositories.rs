@@ -8,18 +8,24 @@ pub struct InMemoryClientRepository {
 }
 
 impl InMemoryClientRepository {
-    pub fn new() -> InMemoryClientRepository {
+    pub fn new() -> Self {
         let mut clients: HashMap<String, Client> = HashMap::new();
+
+        return Self {
+            clients: RefCell::new(clients),
+        };
+    }
+
+    pub fn new_with_samples() -> Self {
+        let repository = Self::new();
 
         let client1 = Client::new("1".to_string(), "Client number 1".to_string());
         let client2 = Client::new("2".to_string(), "Client number 2".to_string());
 
-        clients.insert(client1.id().clone(), client1);
-        clients.insert(client2.id().clone(), client2);
+        repository.save(client1);
+        repository.save(client2);
 
-        return InMemoryClientRepository {
-            clients: RefCell::new(clients),
-        };
+        repository
     }
 }
 
