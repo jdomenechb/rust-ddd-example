@@ -2,7 +2,7 @@
 name = "rust-ddd-login-example"
 version = "0.1.0"
 authors = ["Jordi Domènech Bonilla <jdomenechbborges@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 
