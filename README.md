@@ -1,6 +1,6 @@
 # Rust Domain Driven Design Example
 
-The purpose of this project is to write a simple application in Rust (2018 edition) that follow basic Domain Driven Design principles, in order to test the capabilities of the language to write applications that follow DDD.
+The purpose of this project is to write a simple application in Rust (2021 edition) that follows basic Domain Driven Design principles, in order to test the capabilities of the language to write applications that follow DDD.
 
 
 ## Running the project
@@ -13,18 +13,21 @@ cargo run
 
 A menu will appear that will guide you through the application.
 
+
 ## Structure
 
-The source code is explicitly split into three of the typical DDD layers:
+The source code is explicitly split into four of the typical DDD layers:
 - **Domain** - Where the business rules of the application reside.
 - **Application** - The layer that orchestrates Domain and Infrastructure, and contains the use cases for your application.
-- **Infrastructure** - Contains implementations of the abstractions defined in the Domain layer, and other infrastructure details. 
+- **Infrastructure** - Contains implementations of the abstractions defined in the Domain and Application layer, and other infrastructure details. 
+- **Presentation** - Defines how to present the data and defined the basic controller actions. Normally, this layer is often considered "Infrastructure", and some people prefer to separate it, whereas some people don't.
 
 `main.rs` contains the initializations of the infrastructure implementations, and contains the UI implementation.
 
 
 ## Contribution
 Please, feel free to contribute asking, discussing, commenting or improving the application via Pull Requests or Issues. All type of feedback will be welcomed!
+
 
 ## Resources
 
