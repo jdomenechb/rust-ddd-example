@@ -4,7 +4,7 @@ pub struct CreateClientUseCaseRequest {
 
 impl CreateClientUseCaseRequest {
     pub fn new(name: String) -> CreateClientUseCaseRequest {
-        return CreateClientUseCaseRequest { name };
+        CreateClientUseCaseRequest { name }
     }
 }
 
@@ -14,6 +14,6 @@ pub struct GetClientUseCaseRequest<'a> {
 
 impl<'a> GetClientUseCaseRequest<'a> {
     pub fn new(client_id: &'a str) -> GetClientUseCaseRequest {
-        return GetClientUseCaseRequest { client_id };
+        GetClientUseCaseRequest { client_id }
     }
 }

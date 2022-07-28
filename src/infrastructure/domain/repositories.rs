@@ -11,9 +11,9 @@ impl InMemoryClientRepository {
     pub fn new() -> Self {
         let clients: HashMap<String, Client> = HashMap::new();
 
-        return Self {
+        Self {
             clients: RefCell::new(clients),
-        };
+        }
     }
 
     pub fn new_with_samples() -> Self {
@@ -31,9 +31,7 @@ impl InMemoryClientRepository {
 
 impl ClientRepository for InMemoryClientRepository {
     fn by_id(&self, id: String) -> Result<Client, String> {
-        let id_string = id.to_string();
-
-        let client = self.clients.borrow().get(&id_string).cloned();
+        let client = self.clients.borrow().get(&id).cloned();
 
         match client {
             Some(c) => Ok(c),
@@ -42,15 +40,13 @@ impl ClientRepository for InMemoryClientRepository {
     }
 
     fn save(&self, client: Client) {
-        self.clients
-            .borrow_mut()
-            .insert(client.id().clone(), client);
+        self.clients.borrow_mut().insert(client.id(), client);
     }
 
     fn next_identity(&self) -> String {
         let size = self.clients.borrow().len() + 1;
 
-        String::from(size.to_string())
+        size.to_string()
     }
 
     fn all(&self) -> Vec<Client> {

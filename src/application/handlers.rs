@@ -11,7 +11,7 @@ pub struct CreateClientUseCaseHandler<'a> {
 
 impl<'a> CreateClientUseCaseHandler<'a> {
     pub fn new(client_repository: &dyn ClientRepository) -> CreateClientUseCaseHandler {
-        return CreateClientUseCaseHandler { client_repository };
+        CreateClientUseCaseHandler { client_repository }
     }
 
     pub fn execute(&self, request: CreateClientUseCaseRequest) {
@@ -30,7 +30,7 @@ pub struct GetClientUseCaseHandler<'a> {
 
 impl<'a> GetClientUseCaseHandler<'a> {
     pub fn new(client_repository: &dyn ClientRepository) -> GetClientUseCaseHandler {
-        return GetClientUseCaseHandler { client_repository };
+        GetClientUseCaseHandler { client_repository }
     }
 
     pub fn execute(&self, request: GetClientUseCaseRequest) -> Result<ClientDto, String> {
@@ -50,7 +50,7 @@ pub struct GetAllClientsUseCaseHandler<'a> {
 
 impl<'a> GetAllClientsUseCaseHandler<'a> {
     pub fn new(client_repository: &dyn ClientRepository) -> GetAllClientsUseCaseHandler {
-        return GetAllClientsUseCaseHandler { client_repository };
+        GetAllClientsUseCaseHandler { client_repository }
     }
 
     pub fn execute(&self) -> Vec<ClientDto> {
@@ -58,7 +58,7 @@ impl<'a> GetAllClientsUseCaseHandler<'a> {
             .client_repository
             .all()
             .iter()
-            .map(|x| ClientDto::from_entity(x))
+            .map(ClientDto::from_entity)
             .collect();
     }
 }
