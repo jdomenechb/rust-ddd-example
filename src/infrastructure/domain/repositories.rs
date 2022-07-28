@@ -9,7 +9,7 @@ pub struct InMemoryClientRepository {
 
 impl InMemoryClientRepository {
     pub fn new() -> Self {
-        let mut clients: HashMap<String, Client> = HashMap::new();
+        let clients: HashMap<String, Client> = HashMap::new();
 
         return Self {
             clients: RefCell::new(clients),
