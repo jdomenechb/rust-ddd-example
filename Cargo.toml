@@ -5,4 +5,4 @@ authors = ["Jordi Domènech Bonilla <jdomenechbborges@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-
+readonly = "0"

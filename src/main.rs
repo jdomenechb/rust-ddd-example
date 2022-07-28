@@ -12,6 +12,7 @@ use std::io::Write;
 mod application;
 mod domain;
 mod infrastructure;
+mod presentation;
 
 fn menu() -> u8 {
     println!("\nMENU");
@@ -64,7 +65,7 @@ fn main() {
                     println!("----------------------------------------\n");
 
                     for client in clients {
-                        println!("{:#X?}", client);
+                        println!("{}", client);
                     }
                 }
             }
@@ -83,7 +84,7 @@ fn main() {
                 let client = get_client_use_case_handler.execute(get_client_use_case_req);
 
                 match client {
-                    Ok(c) => println!("{:#X?}", c),
+                    Ok(c) => println!("{}", c),
                     Err(e) => eprintln!("ERROR: {}", e),
                 }
             }

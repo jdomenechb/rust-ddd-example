@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Client {
     id: String,
     name: String,
@@ -9,7 +9,11 @@ impl Client {
         Client { id, name }
     }
 
-    pub fn id(&self) -> &String {
-        &self.id
+    pub fn id(&self) -> String {
+        self.id.clone()
+    }
+
+    pub fn name(&self) -> String {
+        self.name.clone()
     }
 }

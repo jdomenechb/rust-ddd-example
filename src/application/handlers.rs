@@ -1,3 +1,4 @@
+use crate::application::dtos::ClientDto;
 use crate::application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 use crate::domain::entities::Client;
 use crate::domain::repositories::ClientRepository;
@@ -32,10 +33,12 @@ impl<'a> GetClientUseCaseHandler<'a> {
         return GetClientUseCaseHandler { client_repository };
     }
 
-    pub fn execute(&self, request: GetClientUseCaseRequest) -> Result<Client, String> {
-        return self
+    pub fn execute(&self, request: GetClientUseCaseRequest) -> Result<ClientDto, String> {
+        let client = self
             .client_repository
-            .by_id(String::from(request.client_id));
+            .by_id(String::from(request.client_id))?;
+
+        Ok(ClientDto::from_entity(&client))
     }
 }
 
@@ -50,7 +53,12 @@ impl<'a> GetAllClientsUseCaseHandler<'a> {
         return GetAllClientsUseCaseHandler { client_repository };
     }
 
-    pub fn execute(&self) -> Vec<Client> {
-        return self.client_repository.all();
+    pub fn execute(&self) -> Vec<ClientDto> {
+        return self
+            .client_repository
+            .all()
+            .iter()
+            .map(|x| ClientDto::from_entity(x))
+            .collect();
     }
 }
