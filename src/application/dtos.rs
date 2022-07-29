@@ -19,7 +19,7 @@ impl ClientDto {
 }
 
 #[derive(Debug)]
-pub struct ClientDtoList(pub Vec<ClientDto>);
+pub struct DtoList<T>(pub Vec<T>);
 
 #[cfg(test)]
 mod test {

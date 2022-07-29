@@ -1,4 +1,4 @@
-use crate::application::dtos::{ClientDto, ClientDtoList};
+use crate::application::dtos::{ClientDto, DtoList};
 use crate::application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 use crate::domain::entities::Client;
 use crate::domain::repositories::ClientRepository;
@@ -56,8 +56,8 @@ impl GetAllClientsUseCaseHandler {
         GetAllClientsUseCaseHandler { client_repository }
     }
 
-    pub fn execute(&self) -> ClientDtoList {
-        ClientDtoList(
+    pub fn execute(&self) -> DtoList<ClientDto> {
+        DtoList(
             self.client_repository
                 .all()
                 .iter()

@@ -1,4 +1,4 @@
-use crate::application::dtos::{ClientDto, ClientDtoList};
+use crate::application::dtos::{ClientDto, DtoList};
 use std::fmt::{Display, Formatter};
 
 impl Display for ClientDto {
@@ -11,7 +11,7 @@ impl Display for ClientDto {
     }
 }
 
-impl Display for ClientDtoList {
+impl Display for DtoList<ClientDto> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         if self.0.is_empty() {
             return write!(f, "No clients found");
