@@ -15,3 +15,17 @@ impl Client {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::domain::entities::Client;
+
+    #[test]
+    fn create_client() {
+        let client = Client::new("ID", "Name", "Location");
+
+        assert_eq!(client.id, "ID");
+        assert_eq!(client.name, "Name");
+        assert_eq!(client.location, "Location");
+    }
+}
