@@ -49,7 +49,7 @@ fn main() {
     let get_all_clients_use_case_handler =
         GetAllClientsUseCaseHandler::new(client_repository.clone());
     let get_client_use_case_handler = GetClientUseCaseHandler::new(client_repository.clone());
-    let create_client_use_case_handler = CreateClientUseCaseHandler::new(client_repository.clone());
+    let create_client_use_case_handler = CreateClientUseCaseHandler::new(client_repository);
 
     while {
         let option: u8 = menu();
