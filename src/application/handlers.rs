@@ -2,15 +2,16 @@ use crate::application::dtos::ClientDto;
 use crate::application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 use crate::domain::entities::Client;
 use crate::domain::repositories::ClientRepository;
+use std::rc::Rc;
 
 // -------------------------------------------------------------------------------------------------
 
-pub struct CreateClientUseCaseHandler<'a> {
-    client_repository: &'a dyn ClientRepository,
+pub struct CreateClientUseCaseHandler {
+    client_repository: Rc<dyn ClientRepository>,
 }
 
-impl<'a> CreateClientUseCaseHandler<'a> {
-    pub fn new(client_repository: &dyn ClientRepository) -> CreateClientUseCaseHandler {
+impl CreateClientUseCaseHandler {
+    pub fn new(client_repository: Rc<dyn ClientRepository>) -> CreateClientUseCaseHandler {
         CreateClientUseCaseHandler { client_repository }
     }
 
@@ -28,17 +29,17 @@ impl<'a> CreateClientUseCaseHandler<'a> {
 
 // -------------------------------------------------------------------------------------------------
 
-pub struct GetClientUseCaseHandler<'a> {
-    client_repository: &'a dyn ClientRepository,
+pub struct GetClientUseCaseHandler {
+    client_repository: Rc<dyn ClientRepository>,
 }
 
-impl<'a> GetClientUseCaseHandler<'a> {
-    pub fn new(client_repository: &dyn ClientRepository) -> GetClientUseCaseHandler {
+impl GetClientUseCaseHandler {
+    pub fn new(client_repository: Rc<dyn ClientRepository>) -> GetClientUseCaseHandler {
         GetClientUseCaseHandler { client_repository }
     }
 
     pub fn execute(&self, request: GetClientUseCaseRequest) -> Result<ClientDto, String> {
-        let client = self.client_repository.by_id(request.client_id)?;
+        let client = self.client_repository.by_id(request.client_id.as_str())?;
 
         Ok(ClientDto::from_entity(&client))
     }
@@ -46,12 +47,12 @@ impl<'a> GetClientUseCaseHandler<'a> {
 
 // -------------------------------------------------------------------------------------------------
 
-pub struct GetAllClientsUseCaseHandler<'a> {
-    client_repository: &'a dyn ClientRepository,
+pub struct GetAllClientsUseCaseHandler {
+    client_repository: Rc<dyn ClientRepository>,
 }
 
-impl<'a> GetAllClientsUseCaseHandler<'a> {
-    pub fn new(client_repository: &dyn ClientRepository) -> GetAllClientsUseCaseHandler {
+impl GetAllClientsUseCaseHandler {
+    pub fn new(client_repository: Rc<dyn ClientRepository>) -> GetAllClientsUseCaseHandler {
         GetAllClientsUseCaseHandler { client_repository }
     }
 

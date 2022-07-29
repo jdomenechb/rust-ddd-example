@@ -14,12 +14,14 @@ impl CreateClientUseCaseRequest {
 }
 
 #[readonly::make]
-pub struct GetClientUseCaseRequest<'a> {
-    pub client_id: &'a str,
+pub struct GetClientUseCaseRequest {
+    pub client_id: String,
 }
 
-impl<'a> GetClientUseCaseRequest<'a> {
-    pub fn new(client_id: &'a str) -> GetClientUseCaseRequest {
-        GetClientUseCaseRequest { client_id }
+impl GetClientUseCaseRequest {
+    pub fn new(client_id: &str) -> GetClientUseCaseRequest {
+        GetClientUseCaseRequest {
+            client_id: client_id.to_string(),
+        }
     }
 }
