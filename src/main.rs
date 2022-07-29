@@ -1,45 +1,18 @@
 extern crate core;
 extern crate proc_macro;
 
-use crate::presentation::prompt::{ask_question, read_input};
+use crate::presentation::prompt::{ask_question, menu};
 use application::handlers::{
     CreateClientUseCaseHandler, GetAllClientsUseCaseHandler, GetClientUseCaseHandler,
 };
 use application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 use infrastructure::domain::repositories::InMemoryClientRepository;
-use std::io;
-use std::io::Write;
 use std::rc::Rc;
 
 mod application;
 mod domain;
 mod infrastructure;
 mod presentation;
-
-fn menu() -> u8 {
-    println!("\nMENU");
-    println!("----------------------------------------\n");
-    println!("Please, select an option:");
-    println!("\t 1. List all clients");
-    println!("\t 2. Read a client");
-    println!("\t 3. Create a client");
-    println!("\t 0. Exit");
-    print!("\nOption: ");
-
-    io::stdout().flush().expect("Error flushing");
-
-    let option = read_input().trim().parse();
-
-    println!("\n");
-
-    match option {
-        Ok(o) => o,
-        Err(_) => {
-            eprintln!("ERROR: Please, type a number");
-            u8::MAX
-        }
-    }
-}
 
 fn main() {
     let client_repository = Rc::new(InMemoryClientRepository::new_with_samples());
@@ -50,7 +23,7 @@ fn main() {
     let create_client_use_case_handler = CreateClientUseCaseHandler::new(client_repository);
 
     while {
-        let option: u8 = menu();
+        let option: u8 = menu(vec!["List all clients", "Read a client", "Create a client"]);
 
         match option {
             1 => {
