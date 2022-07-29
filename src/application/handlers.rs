@@ -1,5 +1,7 @@
 use crate::application::dtos::{ClientDto, DtoList};
-use crate::application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
+use crate::application::requests::{
+    CreateClientUseCaseRequest, EditClientUseCaseRequest, GetClientUseCaseRequest,
+};
 use crate::domain::entities::Client;
 use crate::domain::repositories::ClientRepository;
 use std::rc::Rc;
@@ -67,9 +69,34 @@ impl GetAllClientsUseCaseHandler {
     }
 }
 
+// -------------------------------------------------------------------------------------------------
+
+pub struct EditClientUseCaseHandler {
+    client_repository: Rc<dyn ClientRepository>,
+}
+
+impl EditClientUseCaseHandler {
+    pub fn new(client_repository: Rc<dyn ClientRepository>) -> Self {
+        Self { client_repository }
+    }
+
+    pub fn execute(&self, request: EditClientUseCaseRequest) -> Result<(), String> {
+        let mut client = self.client_repository.by_id(request.client_id.as_str())?;
+        client.edit(request.name.as_str(), request.location.as_str());
+
+        self.client_repository.save(client);
+
+        Ok(())
+    }
+}
+
+// -------------------------------------------------------------------------------------------------
+
 #[cfg(test)]
 mod test {
     use crate::application::dtos::ClientDto;
+    use crate::application::handlers::EditClientUseCaseHandler;
+    use crate::application::requests::EditClientUseCaseRequest;
     use crate::domain::entities::Client;
     use crate::domain::repositories::MockClientRepository;
     use crate::{
@@ -171,5 +198,44 @@ mod test {
         let result = get_all_clients_use_case_handler.execute();
 
         assert_eq!(client_dtos, result.0);
+    }
+
+    #[test]
+    fn edit_client_use_case_handler_execute_ok() {
+        let client: Client = Faker.fake();
+
+        let id = client.id.clone();
+        let id2 = id.clone();
+        let id3 = id.clone();
+
+        let new_name: String = Faker.fake();
+        let new_location: String = Faker.fake();
+
+        let expected_client = Client::new(id2.as_str(), new_name.as_str(), new_location.as_str());
+
+        let mut client_repository_mock = MockClientRepository::new();
+
+        client_repository_mock
+            .expect_by_id()
+            .withf(move |x: &str| x.eq(id.as_str()))
+            .times(1)
+            .return_const(Ok(client));
+
+        client_repository_mock
+            .expect_save()
+            .withf(move |x: &Client| x == &expected_client)
+            .times(1)
+            .return_const(());
+
+        let edit_client_use_case_handler =
+            EditClientUseCaseHandler::new(Rc::new(client_repository_mock));
+
+        let result = edit_client_use_case_handler.execute(EditClientUseCaseRequest::new(
+            id3.as_str(),
+            new_name.as_str(),
+            new_location.as_str(),
+        ));
+
+        assert_eq!(Ok(()), result);
     }
 }

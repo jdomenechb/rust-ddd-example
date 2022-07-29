@@ -1,6 +1,8 @@
 extern crate core;
 extern crate proc_macro;
 
+use crate::application::handlers::EditClientUseCaseHandler;
+use crate::application::requests::EditClientUseCaseRequest;
 use crate::presentation::prompt::{ask_question, menu};
 use application::handlers::{
     CreateClientUseCaseHandler, GetAllClientsUseCaseHandler, GetClientUseCaseHandler,
@@ -20,14 +22,20 @@ fn main() {
     let get_all_clients_use_case_handler =
         GetAllClientsUseCaseHandler::new(client_repository.clone());
     let get_client_use_case_handler = GetClientUseCaseHandler::new(client_repository.clone());
-    let create_client_use_case_handler = CreateClientUseCaseHandler::new(client_repository);
+    let create_client_use_case_handler = CreateClientUseCaseHandler::new(client_repository.clone());
+    let edit_client_use_case_handler = EditClientUseCaseHandler::new(client_repository);
 
     while {
         let option: u8 = menu(
             std::io::stdin().lock(),
             std::io::stdout(),
             std::io::stderr(),
-            vec!["List all clients", "Read a client", "Create a client"],
+            vec![
+                "List all clients",
+                "Read a client",
+                "Create a client",
+                "Edit a client",
+            ],
         );
 
         match option {
@@ -74,6 +82,35 @@ fn main() {
                 create_client_use_case_handler.execute(create_client_use_case_req);
 
                 println!("\nClient created!");
+            }
+
+            4 => {
+                let client_id = ask_question(
+                    std::io::stdin().lock(),
+                    std::io::stdout(),
+                    "Please, enter the ID of the client that you want to read:",
+                );
+
+                let client_name = ask_question(
+                    std::io::stdin().lock(),
+                    std::io::stdout(),
+                    "\nEnter the new name of the client:",
+                );
+                let client_location = ask_question(
+                    std::io::stdin().lock(),
+                    std::io::stdout(),
+                    "\nEnter the new location of the client:",
+                );
+
+                let result = edit_client_use_case_handler.execute(EditClientUseCaseRequest::new(
+                    client_id.as_str(),
+                    client_name.as_str(),
+                    client_location.as_str(),
+                ));
+
+                if let Err(e) = result {
+                    eprintln!("ERROR: {}", e);
+                }
             }
 
             0 => println!("Exiting..."),
