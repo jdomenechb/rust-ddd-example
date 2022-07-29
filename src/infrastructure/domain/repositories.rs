@@ -19,8 +19,8 @@ impl InMemoryClientRepository {
     pub fn new_with_samples() -> Self {
         let repository = Self::new();
 
-        let client1 = Client::new("1".to_string(), "Client number 1".to_string());
-        let client2 = Client::new("2".to_string(), "Client number 2".to_string());
+        let client1 = Client::new("1", "Client number 1", "London");
+        let client2 = Client::new("2", "Client number 2", "Madrid");
 
         repository.save(client1);
         repository.save(client2);

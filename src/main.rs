@@ -79,6 +79,8 @@ fn main() {
                     .read_line(&mut client_id)
                     .expect("Failed to read line");
 
+                println!();
+
                 let get_client_use_case_req = GetClientUseCaseRequest::new(client_id.trim());
 
                 let client = get_client_use_case_handler.execute(get_client_use_case_req);
@@ -98,8 +100,16 @@ fn main() {
                     .read_line(&mut client_name)
                     .expect("Failed to read line");
 
+                println!("\nEnter the location of the client that you want to create:");
+
+                let mut client_location: String = String::new();
+
+                io::stdin()
+                    .read_line(&mut client_location)
+                    .expect("Failed to read line");
+
                 let create_client_use_case_req =
-                    CreateClientUseCaseRequest::new(String::from(client_name.trim()));
+                    CreateClientUseCaseRequest::new(client_name.trim(), client_location.trim());
 
                 create_client_use_case_handler.execute(create_client_use_case_req);
             }

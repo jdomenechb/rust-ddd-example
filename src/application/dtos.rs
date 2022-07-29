@@ -4,6 +4,7 @@ use crate::domain::entities::Client;
 pub struct ClientDto {
     pub id: String,
     pub name: String,
+    pub location: String,
 }
 
 impl ClientDto {
@@ -11,6 +12,7 @@ impl ClientDto {
         Self {
             id: client.id(),
             name: client.name(),
+            location: client.location(),
         }
     }
 }

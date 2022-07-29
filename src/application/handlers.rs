@@ -16,7 +16,11 @@ impl<'a> CreateClientUseCaseHandler<'a> {
 
     pub fn execute(&self, request: CreateClientUseCaseRequest) {
         let id = self.client_repository.next_identity();
-        let client = Client::new(id, request.name);
+        let client = Client::new(
+            id.as_str(),
+            request.name.as_str(),
+            request.location.as_str(),
+        );
 
         self.client_repository.save(client);
     }
