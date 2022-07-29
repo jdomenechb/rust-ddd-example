@@ -108,8 +108,9 @@ fn main() {
                     client_location.as_str(),
                 ));
 
-                if let Err(e) = result {
-                    eprintln!("ERROR: {}", e);
+                match result {
+                    Ok(_) => println!("\nClient edited!"),
+                    Err(e) => eprintln!("\nERROR: {}", e),
                 }
             }
 
