@@ -22,7 +22,9 @@ The source code is explicitly split into four of the typical DDD layers:
 - **Infrastructure** - Contains implementations of the abstractions defined in the Domain and Application layer, and other infrastructure details. 
 - **Presentation** - Defines how to present the data and defined the basic controller actions. Normally, this layer is often considered "Infrastructure", and some people prefer to separate it, whereas some people don't.
 
-`main.rs` contains the initializations of the infrastructure implementations, and contains the UI implementation.
+`main.rs` contains the initializations of the infrastructure implementations.
+
+The code also contains unit testing.
 
 
 ## Contribution
