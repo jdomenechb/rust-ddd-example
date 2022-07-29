@@ -1,6 +1,7 @@
 extern crate core;
 extern crate proc_macro;
 
+use crate::presentation::prompt::{ask_question, read_input};
 use application::handlers::{
     CreateClientUseCaseHandler, GetAllClientsUseCaseHandler, GetClientUseCaseHandler,
 };
@@ -24,21 +25,18 @@ fn menu() -> u8 {
     println!("\t 3. Create a client");
     println!("\t 0. Exit");
     print!("\nOption: ");
+
     io::stdout().flush().expect("Error flushing");
 
-    let mut input: String = String::new();
+    let option = read_input().trim().parse();
 
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read line");
-
-    let option = input.trim().parse();
+    println!("\n");
 
     match option {
         Ok(o) => o,
         Err(_) => {
             eprintln!("ERROR: Please, type a number");
-            99
+            u8::MAX
         }
     }
 }
@@ -56,21 +54,14 @@ fn main() {
 
         match option {
             1 => {
-                println!();
-
                 let clients = get_all_clients_use_case_handler.execute();
 
-                println!("{}", clients);
+                print!("{}", clients);
             }
 
             2 => {
-                println!("\nPlease, enter the ID of the client that you want to read:");
-
-                let mut client_id: String = String::new();
-
-                io::stdin()
-                    .read_line(&mut client_id)
-                    .expect("Failed to read line");
+                let client_id =
+                    ask_question("Please, enter the ID of the client that you want to read:");
 
                 println!();
 
@@ -85,31 +76,24 @@ fn main() {
             }
 
             3 => {
-                println!("\nPlease, enter the name of the client that you want to create:");
-
-                let mut client_name: String = String::new();
-
-                io::stdin()
-                    .read_line(&mut client_name)
-                    .expect("Failed to read line");
-
-                println!("\nEnter the location of the client that you want to create:");
-
-                let mut client_location: String = String::new();
-
-                io::stdin()
-                    .read_line(&mut client_location)
-                    .expect("Failed to read line");
+                let client_name =
+                    ask_question("Please, enter the name of the client that you want to create:");
+                let client_location =
+                    ask_question("\nEnter the location of the client that you want to create:");
 
                 let create_client_use_case_req =
                     CreateClientUseCaseRequest::new(client_name.trim(), client_location.trim());
 
                 create_client_use_case_handler.execute(create_client_use_case_req);
+
+                println!("\nClient created!");
             }
 
             0 => println!("Exiting..."),
             _ => println!("Invalid option"),
         };
+
+        println!();
 
         option != 0
     } {}
