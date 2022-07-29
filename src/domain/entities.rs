@@ -1,4 +1,6 @@
-#[derive(Clone)]
+use fake::{Dummy, Fake};
+
+#[derive(Clone, Dummy)]
 #[readonly::make]
 pub struct Client {
     pub id: String,
@@ -19,13 +21,18 @@ impl Client {
 #[cfg(test)]
 mod test {
     use crate::domain::entities::Client;
+    use fake::{Fake, Faker};
 
     #[test]
     fn create_client() {
-        let client = Client::new("ID", "Name", "Location");
+        let id: String = Faker.fake();
+        let name: String = Faker.fake();
+        let location: String = Faker.fake();
 
-        assert_eq!(client.id, "ID");
-        assert_eq!(client.name, "Name");
-        assert_eq!(client.location, "Location");
+        let client = Client::new(id.as_str(), name.as_str(), location.as_str());
+
+        assert_eq!(client.id, id.as_str());
+        assert_eq!(client.name, name.as_str());
+        assert_eq!(client.location, location.as_str());
     }
 }

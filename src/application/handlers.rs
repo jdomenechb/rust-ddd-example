@@ -66,3 +66,110 @@ impl GetAllClientsUseCaseHandler {
         )
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::application::dtos::ClientDto;
+    use crate::domain::entities::Client;
+    use crate::domain::repositories::MockClientRepository;
+    use crate::{
+        CreateClientUseCaseHandler, CreateClientUseCaseRequest, GetAllClientsUseCaseHandler,
+        GetClientUseCaseHandler, GetClientUseCaseRequest,
+    };
+    use fake::faker::address::en::CityName;
+    use fake::faker::lorem::en::Sentence;
+    use fake::faker::name::en::Name;
+    use fake::{Fake, Faker};
+    use std::rc::Rc;
+
+    #[test]
+    fn create_client_use_case_handler_execute() {
+        let id: String = Faker.fake();
+
+        let mut client_repository_mock = MockClientRepository::new();
+
+        client_repository_mock
+            .expect_next_identity()
+            .times(1)
+            .return_const(id.clone());
+
+        client_repository_mock
+            .expect_save()
+            .withf(move |client: &Client| client.id.eq(&id))
+            .times(1)
+            .return_const(());
+
+        let create_client_use_case_handler =
+            CreateClientUseCaseHandler::new(Rc::new(client_repository_mock));
+
+        create_client_use_case_handler.execute(CreateClientUseCaseRequest::new(
+            Name().fake::<String>().as_str(),
+            CityName().fake::<String>().as_str(),
+        ));
+    }
+
+    #[test]
+    fn get_client_use_case_handler_execute_ok() {
+        let client: Client = Faker.fake();
+        let client_expectation = ClientDto::from_entity(&client);
+        let id = client.id.clone();
+        let id2 = client.id.clone();
+
+        let mut client_repository_mock = MockClientRepository::new();
+
+        client_repository_mock
+            .expect_by_id()
+            .withf(move |x: &str| x.eq(id.as_str()))
+            .times(1)
+            .return_const(Ok(client));
+
+        let get_client_use_case_handler =
+            GetClientUseCaseHandler::new(Rc::new(client_repository_mock));
+
+        let result =
+            get_client_use_case_handler.execute(GetClientUseCaseRequest::new(id2.as_str()));
+
+        assert_eq!(result, Ok(client_expectation))
+    }
+
+    #[test]
+    fn get_client_use_case_handler_execute_ko() {
+        let id: String = Faker.fake();
+        let id2 = id.clone();
+        let mut client_repository_mock = MockClientRepository::new();
+
+        let error_txt: String = Sentence(3..8).fake();
+
+        client_repository_mock
+            .expect_by_id()
+            .withf(move |x: &str| x.eq(id.as_str()))
+            .times(1)
+            .return_const(Err(error_txt.clone()));
+
+        let get_client_use_case_handler =
+            GetClientUseCaseHandler::new(Rc::new(client_repository_mock));
+
+        let result =
+            get_client_use_case_handler.execute(GetClientUseCaseRequest::new(id2.as_str()));
+
+        assert_eq!(result, Err(error_txt))
+    }
+
+    #[test]
+    fn get_all_clients_use_case_handler_execute() {
+        let mut client_repository_mock = MockClientRepository::new();
+        let clients: Vec<Client> = vec![Faker.fake(), Faker.fake(), Faker.fake()];
+        let client_dtos: Vec<ClientDto> = clients.iter().map(ClientDto::from_entity).collect();
+
+        client_repository_mock
+            .expect_all()
+            .times(1)
+            .return_const(clients);
+
+        let get_all_clients_use_case_handler =
+            GetAllClientsUseCaseHandler::new(Rc::new(client_repository_mock));
+        let result = get_all_clients_use_case_handler.execute();
+
+        assert_eq!(client_dtos, result.0);
+    }
+}
