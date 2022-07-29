@@ -7,8 +7,8 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn new(id: &str, name: &str, location: &str) -> Client {
-        Client {
+    pub fn new(id: &str, name: &str, location: &str) -> Self {
+        Self {
             id: id.to_string(),
             name: name.to_string(),
             location: location.to_string(),
