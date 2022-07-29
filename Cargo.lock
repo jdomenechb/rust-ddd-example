@@ -317,8 +317,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3f87b73ce11b1619a3c6332f45341e0047173771e8b8b73f87bfeefb7b56244"
 
 [[package]]
-name = "rust-ddd-login-example"
-version = "0.1.0"
+name = "rust-ddd-example"
+version = "2.0.0"
 dependencies = [
  "fake",
  "mockall",

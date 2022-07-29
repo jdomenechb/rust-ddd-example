@@ -1,6 +1,6 @@
 [package]
-name = "rust-ddd-login-example"
-version = "0.1.0"
+name = "rust-ddd-example"
+version = "2.0.0"
 authors = ["Jordi Domènech Bonilla <jdomenechbborges@gmail.com>"]
 edition = "2021"
 
