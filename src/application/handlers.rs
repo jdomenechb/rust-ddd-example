@@ -238,4 +238,41 @@ mod test {
 
         assert_eq!(Ok(()), result);
     }
+
+    #[test]
+    fn edit_client_use_case_handler_execute_on_non_existing_client() {
+        let client: Client = Faker.fake();
+
+        let id = client.id.clone();
+        let id3 = id.clone();
+
+        let new_name: String = Faker.fake();
+        let new_location: String = Faker.fake();
+
+        let error_txt: String = Sentence(3..8).fake();
+
+        let mut client_repository_mock = MockClientRepository::new();
+
+        client_repository_mock
+            .expect_by_id()
+            .withf(move |x: &str| x.eq(id.as_str()))
+            .times(1)
+            .return_const(Err(error_txt.clone()));
+
+        client_repository_mock
+            .expect_save()
+            .times(0)
+            .return_const(());
+
+        let edit_client_use_case_handler =
+            EditClientUseCaseHandler::new(Rc::new(client_repository_mock));
+
+        let result = edit_client_use_case_handler.execute(EditClientUseCaseRequest::new(
+            id3.as_str(),
+            new_name.as_str(),
+            new_location.as_str(),
+        ));
+
+        assert_eq!(Err(error_txt), result);
+    }
 }
