@@ -10,9 +10,9 @@ pub struct ClientDto {
 impl ClientDto {
     pub fn from_entity(client: &Client) -> Self {
         Self {
-            id: client.id(),
-            name: client.name(),
-            location: client.location(),
+            id: client.id.clone(),
+            name: client.name.clone(),
+            location: client.location.clone(),
         }
     }
 }

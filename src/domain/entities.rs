@@ -1,8 +1,9 @@
 #[derive(Clone)]
+#[readonly::make]
 pub struct Client {
-    id: String,
-    name: String,
-    location: String,
+    pub id: String,
+    pub name: String,
+    pub location: String,
 }
 
 impl Client {
@@ -12,17 +13,5 @@ impl Client {
             name: name.to_string(),
             location: location.to_string(),
         }
-    }
-
-    pub fn id(&self) -> String {
-        self.id.clone()
-    }
-
-    pub fn name(&self) -> String {
-        self.name.clone()
-    }
-
-    pub fn location(&self) -> String {
-        self.location.clone()
     }
 }
