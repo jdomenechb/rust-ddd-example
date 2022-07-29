@@ -5,8 +5,8 @@ pub struct CreateClientUseCaseRequest {
 }
 
 impl CreateClientUseCaseRequest {
-    pub fn new(name: &str, location: &str) -> CreateClientUseCaseRequest {
-        CreateClientUseCaseRequest {
+    pub fn new(name: &str, location: &str) -> Self {
+        Self {
             name: name.to_string(),
             location: location.to_string(),
         }
@@ -19,8 +19,8 @@ pub struct GetClientUseCaseRequest {
 }
 
 impl GetClientUseCaseRequest {
-    pub fn new(client_id: &str) -> GetClientUseCaseRequest {
-        GetClientUseCaseRequest {
+    pub fn new(client_id: &str) -> Self {
+        Self {
             client_id: client_id.to_string(),
         }
     }
