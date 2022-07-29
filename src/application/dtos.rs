@@ -16,3 +16,5 @@ impl ClientDto {
         }
     }
 }
+
+pub struct ClientDtoList(pub Vec<ClientDto>);

@@ -60,16 +60,7 @@ fn main() {
 
                 let clients = get_all_clients_use_case_handler.execute();
 
-                if clients.is_empty() {
-                    println!("No clients found");
-                } else {
-                    println!("Client list");
-                    println!("----------------------------------------\n");
-
-                    for client in clients {
-                        println!("{}", client);
-                    }
-                }
+                println!("{}", clients);
             }
 
             2 => {

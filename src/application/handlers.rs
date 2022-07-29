@@ -1,4 +1,4 @@
-use crate::application::dtos::ClientDto;
+use crate::application::dtos::{ClientDto, ClientDtoList};
 use crate::application::requests::{CreateClientUseCaseRequest, GetClientUseCaseRequest};
 use crate::domain::entities::Client;
 use crate::domain::repositories::ClientRepository;
@@ -56,12 +56,13 @@ impl GetAllClientsUseCaseHandler {
         GetAllClientsUseCaseHandler { client_repository }
     }
 
-    pub fn execute(&self) -> Vec<ClientDto> {
-        return self
-            .client_repository
-            .all()
-            .iter()
-            .map(ClientDto::from_entity)
-            .collect();
+    pub fn execute(&self) -> ClientDtoList {
+        ClientDtoList(
+            self.client_repository
+                .all()
+                .iter()
+                .map(ClientDto::from_entity)
+                .collect(),
+        )
     }
 }
