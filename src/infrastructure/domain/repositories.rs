@@ -30,8 +30,8 @@ impl InMemoryClientRepository {
 }
 
 impl ClientRepository for InMemoryClientRepository {
-    fn by_id(&self, id: String) -> Result<Client, String> {
-        let client = self.clients.borrow().get(&id).cloned();
+    fn by_id(&self, id: &str) -> Result<Client, String> {
+        let client = self.clients.borrow().get(id).cloned();
 
         match client {
             Some(c) => Ok(c),

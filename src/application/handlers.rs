@@ -38,9 +38,7 @@ impl<'a> GetClientUseCaseHandler<'a> {
     }
 
     pub fn execute(&self, request: GetClientUseCaseRequest) -> Result<ClientDto, String> {
-        let client = self
-            .client_repository
-            .by_id(String::from(request.client_id))?;
+        let client = self.client_repository.by_id(request.client_id)?;
 
         Ok(ClientDto::from_entity(&client))
     }
