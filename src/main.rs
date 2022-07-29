@@ -23,7 +23,12 @@ fn main() {
     let create_client_use_case_handler = CreateClientUseCaseHandler::new(client_repository);
 
     while {
-        let option: u8 = menu(vec!["List all clients", "Read a client", "Create a client"]);
+        let option: u8 = menu(
+            std::io::stdin().lock(),
+            std::io::stdout(),
+            std::io::stderr(),
+            vec!["List all clients", "Read a client", "Create a client"],
+        );
 
         match option {
             1 => {
@@ -33,12 +38,15 @@ fn main() {
             }
 
             2 => {
-                let client_id =
-                    ask_question("Please, enter the ID of the client that you want to read:");
+                let client_id = ask_question(
+                    std::io::stdin().lock(),
+                    std::io::stdout(),
+                    "Please, enter the ID of the client that you want to read:",
+                );
 
                 println!();
 
-                let get_client_use_case_req = GetClientUseCaseRequest::new(client_id.trim());
+                let get_client_use_case_req = GetClientUseCaseRequest::new(client_id.as_str());
 
                 let client = get_client_use_case_handler.execute(get_client_use_case_req);
 
@@ -49,13 +57,19 @@ fn main() {
             }
 
             3 => {
-                let client_name =
-                    ask_question("Please, enter the name of the client that you want to create:");
-                let client_location =
-                    ask_question("\nEnter the location of the client that you want to create:");
+                let client_name = ask_question(
+                    std::io::stdin().lock(),
+                    std::io::stdout(),
+                    "Please, enter the name of the client that you want to create:",
+                );
+                let client_location = ask_question(
+                    std::io::stdin().lock(),
+                    std::io::stdout(),
+                    "\nEnter the location of the client that you want to create:",
+                );
 
                 let create_client_use_case_req =
-                    CreateClientUseCaseRequest::new(client_name.trim(), client_location.trim());
+                    CreateClientUseCaseRequest::new(client_name.as_str(), client_location.as_str());
 
                 create_client_use_case_handler.execute(create_client_use_case_req);
 
